@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 def index(request):
     # Query the database for a list of ALL categories currently stored.
@@ -29,6 +30,13 @@ def index(request):
     # Render the response and send it back!
 
     return render(request, 'rango/index.html', context=context_dict)
+
+@login_required
+def user_logout(request):
+    #Since we know the user is logged in, we can now just log them out.
+    logout(request)
+    # Take the user back to the homepage.
+    return redirect(reverse('rango:index'))
 
 @login_required
 def restricted(request):
@@ -156,29 +164,29 @@ def user_login(request):
     # value does not exist, while request.POST['<variable>']
     # will raise a KeyError exception.
 
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
     # Use Django's machinery to attempt to see if the username/password
     # combination is valid - a User object is returned if it is.
-    user = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password)
     # If we have a User object, the details are correct.
     # If None (Python's way of representing the absence of a value), no user
     # with matching credentials was found.
-    if user:
+        if user:
         # Is the account active? It could have been disabled.
-        if user.is_active:
-        # If the account is valid and active, we can log the user in.
-        # We'll send the user back to the homepage.
-            login(request, user)
+            if user.is_active:
+            # If the account is valid and active, we can log the user in.
+            # We'll send the user back to the homepage.
+                login(request, user)
 
-           return redirect(reverse('rango:index'))
+                return redirect(reverse('rango:index'))
+            else:
+                # An inactive account was used - no logging in!
+                return HttpResponse("Your Rango account is disabled.")
         else:
-            # An inactive account was used - no logging in!
-            return HttpResponse("Your Rango account is disabled.")
-    else:
-        #Bad login details were provided. So we can't log the user in.
-        print(f"Invalid login details: {username}, {password}")
-        return HttpResponse("Invalid login details supplied.")
+            #Bad login details were provided. So we can't log the user in.
+            print(f"Invalid login details: {username}, {password}")
+            return HttpResponse("Invalid login details supplied.")
     # The request is not a HTTP POST, so display the login form.
 
     else:
