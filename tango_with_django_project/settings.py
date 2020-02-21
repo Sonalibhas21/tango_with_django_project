@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rango'
+    'rango',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +83,8 @@ DATABASES = {
     }
 }
 
+PASSWORD_HASHERS = ('django.contrib.auth.hashers.PBKDF2PasswordHasher',
+                    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
