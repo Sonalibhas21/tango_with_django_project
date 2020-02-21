@@ -1,5 +1,9 @@
-<!DOCTYPE html><html>	<body>
-		{% extends 'rango/base.html' %}		{% load staticfiles %}			{% block title_block %}		{% if category %}			{{ category.name }}		{% else %}			Unknown Category		{% endif %}		{% endblock %}		{% block body_block %}
+<!DOCTYPE html>
+{% extends 'rango/base.html' %}<html>
+	<head>
+		{% load rango_template_tags %}		<title>		Rango -		{% block title_block %}			About Rango		{% endblock %}		</title>	</head>
+	<body>
+				{% load staticfiles %}			{% if category %}			{{ category.name }}		{% else %}			Unknown Category		{% endif %}		{% block body_block %}
 		<h1>Rango says here is the about page.</h1>		<div>			<strong>{{ boldmessage }}</strong><br />
 		</div>
 		<div>
